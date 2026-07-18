@@ -15,7 +15,7 @@ on:
       - main
     paths:
       - 'services/IdentityService/**'
-      - '.github/workflows/identity-ci.yml'
+      - '.github/workflows/identity-ci.yaml'
   
 concurrency:
   group: identity-${{ github.ref }}
@@ -23,7 +23,7 @@ concurrency:
 
 env:
   SERVICE_PATH: services/IdentityService
-  SOLUTION_FILE: IdentityService.sln
+  SOLUTION_FILE: IdentityService.slnx
 
 jobs:
   build:
