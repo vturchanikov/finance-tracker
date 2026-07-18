@@ -9,7 +9,7 @@ on:
       - 'services/IdentityService/**'
       - '.github/workflows/identity-ci.yaml'
 
-  pull-request:
+  pull_request:
     branches:
       - develop
       - main
