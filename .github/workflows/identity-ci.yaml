@@ -1,0 +1,53 @@
+name: Identity Service CI
+
+on:
+  push:
+    branches:
+      - develop
+      - 'feature/**'
+    paths:
+      - 'services/IdentityService/**'
+      - '.github/workflows/identity-ci.yaml'
+
+  pull_request:
+    branches:
+      - develop
+      - main
+    paths:
+      - 'services/IdentityService/**'
+      - '.github/workflows/identity-ci.yaml'
+  
+concurrency:
+  group: identity-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SERVICE_PATH: services/IdentityService
+  SOLUTION_FILE: IdentityService.slnx
+
+jobs:
+  build:
+    name: Restore, Build and Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ${{ env.SERVICE_PATH }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: ${{ env.SERVICE_PATH }}/global.json
+
+      - name: Restore
+        run: dotnet restore ${{ env.SOLUTION_FILE }}
+
+      - name: Build
+        run: dotnet build ${{ env.SOLUTION_FILE }} --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ${{ env.SOLUTION_FILE }} --configuration Release --no-build
